@@ -62,13 +62,17 @@ def seasons(SITE, FULLEPISODES, CLIPS, FULLEPISODESWEB = None, season_urls = com
 			try:
 				show = season_url.split('/')[-1].replace(' ', '')
 				web_data = connection.getURL(FULLEPISODESWEB % show)
-				web_tree = BeautifulSoup(web_data, 'html.parser')
+				try:
+					web_tree = BeautifulSoup(web_data, 'html.parser')
+				except:
+					web_tree = BeautifulSoup(web_data, 'html5lib')
 				all = len(web_tree.find_all('div', class_ = 'view-mode-vid_teaser_show_episode'))
 				auth = len(web_tree.find_all('div', class_ = 'tve-video-auth'))
 				if all > auth:
 					seasons.append(('Full Episodes',  SITE, 'episodes_web', FULLEPISODESWEB % show, -1, -1))
 				else:
 					try:
+						print "eps block"
 						eps = web_tree.find( class_ = 'view-syfy-show-episodes').find_all(text= re.compile('Full Episode'))
 						headers = []
 						for ep in eps:

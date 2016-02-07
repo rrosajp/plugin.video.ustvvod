@@ -41,7 +41,10 @@ def episodes_web(episode_url = common.args.url):
 		episode_data = connection.getURL(episode_url)
 	except Exception, e:
 		print "Exception", e
-	web_tree = BeautifulSoup(episode_data, 'html.parser')
+	try:
+		web_tree = BeautifulSoup(episode_data, 'html.parser')
+	except:
+		web_tree = BeautifulSoup(episode_data, 'html5lib')
 	show_name = re.compile('showSite":"(.*?)"').findall(episode_data)[0]
 	try:
 		episode_menu = web_tree.find( class_ = 'view-syfy-show-episodes').find_all(class_ = 'views-row')
