@@ -8,7 +8,7 @@ import simplejson
 import sys
 import urllib
 import xbmcaddon
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, SoupStrainer
 
 addon = xbmcaddon.Addon()
 
@@ -27,8 +27,11 @@ def masterlist():
 	root_doubles = []
 	root_url = SHOWS
 	root_data = connection.getURL(root_url)
-	root_tree = BeautifulSoup(root_data, 'html.parser')
-	root_menu = root_tree.find('div', class_ = 'full_episodes').find_all('a', href = re.compile('^http+'), class_ = False)
+	try:
+		root_tree = BeautifulSoup(root_data, 'html.parser', parse_only = SoupStrainer('div'))
+	except Exception, e:
+		print e
+	root_menu = root_tree.find(class_ = 'full_episodes').find_all('a', href = re.compile('^http+'), class_ = False)
 	for root_item in root_menu:
 		root_name = root_item.string
 		if root_name is not None and root_name.lower() not in root_doubles and root_name.split(' with ')[0].lower() not in root_doubles:
