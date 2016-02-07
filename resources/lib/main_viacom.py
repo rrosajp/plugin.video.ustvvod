@@ -328,6 +328,7 @@ def get_videos(queue, i, video_item, qbitrate, rtmp = False):
 			lbitrate = -1
 			m3u8_url = None
 			#can we just pass video_menu
+			
 			if addon.getSetting('sel_quality') == 'true' or qbitrate is not None or  int(xbmc.getInfoLabel( "System.BuildVersion" )[:2]) < 14 or common.use_proxy() :
 				m3u8_master_data = connection.getURL(video_menu, savecookie = True, cookiefile = i)
 				m3u8_master = m3u8.parse(m3u8_master_data)
@@ -362,7 +363,9 @@ def get_videos(queue, i, video_item, qbitrate, rtmp = False):
 				playfile.write(m3u8_data)
 				playfile.close()
 			else:
+				print "********************* No sel*****************"
 				file_name = video_menu
+				player._localHTTPServer = False
 			queue.put([i, file_name, duration, closedcaption])
 		except:
 			pass	
