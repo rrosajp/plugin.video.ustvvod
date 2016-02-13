@@ -13,6 +13,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcvfs
+import glob
 
 from bs4 import BeautifulSoup
 
@@ -176,9 +177,16 @@ class Main:
 		if '--' not in series_title:
 			directory = os.path.join(TV_SHOWS_PATH, self.cleanfilename(show_name))
 			try:
-				shutil.rmtree(directory)
+				#Need to remove old eps
+				#Preserve other content in dr
+				#prevent paging of content, shows that dont comr back?
+				print "Cleaning", directory
+				filelist = glob.glob(os.path.join(directory,"*.strm"))
+				for f in filelist:
+					print "Refreshing ",f
+					os.remove(f)
 			except:
-				pass
+				print "Exception Deleting"
 			seasons = common.get_seasons(mode, sitemode, url)
 			for season in seasons:
 				section_title,  site, subsitemode, suburl, locked, unlocked = season
