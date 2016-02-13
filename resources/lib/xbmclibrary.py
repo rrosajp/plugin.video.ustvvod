@@ -176,17 +176,8 @@ class Main:
 		has_movies = False
 		if '--' not in series_title:
 			directory = os.path.join(TV_SHOWS_PATH, self.cleanfilename(show_name))
-			try:
-				#Need to remove old eps
-				#Preserve other content in dr
-				#prevent paging of content, shows that dont comr back?
-				print "Cleaning", directory
-				filelist = glob.glob(os.path.join(directory,"*.strm"))
-				for f in filelist:
-					print "Refreshing ",f
-					os.remove(f)
-			except:
-				print "Exception Deleting"
+			filelist = glob.glob(os.path.join(directory,"*.strm"))
+		
 			seasons = common.get_seasons(mode, sitemode, url)
 			for season in seasons:
 				section_title,  site, subsitemode, suburl, locked, unlocked = season
@@ -285,11 +276,21 @@ class Main:
 				tvshowDetails +='<dateadded>' + time.strftime("%Y-%m-%d %H:%M:%S") + '</dateadded>'
 				tvshowDetails +='</tvshow>'					
 				self.SaveFile( 'tvshow.nfo', tvshowDetails, directory)
+			exported = []
 			for episode in allepisodes:
 				try:
-					self.ExportVideo(episode, directory, studio = studio)
+					fname = self.ExportVideo(episode, directory, studio = studio)
+					filelist.remove(fname)
 				except Exception, e:
 					print "Can't export video", e
+			#Delete eps not updated
+			try:
+				for f in filelist:
+					print "Expired ",f
+					os.remove(f)
+			except:
+				print "Exception deleting expired content"
+			
 			self.Notification(addon.getLocalizedString(39036), addon.getLocalizedString(39037) % show_name, image = tvdbposter)
 
 		else:
@@ -420,6 +421,7 @@ class Main:
 					pass
 				movie += '</movie>'
 				self.SaveFile(filename + '.nfo', movie, directory)
+		return os.path.join(directory, filename + '.strm')
 
 	def SetupUSTVVODLibrary(self):
 		print "Trying to add USTVVOD source paths..."
