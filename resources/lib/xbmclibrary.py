@@ -282,7 +282,7 @@ class Main:
 					fname = self.ExportVideo(episode, directory, studio = studio)
 					filelist.remove(fname)
 				except Exception, e:
-					print "Can't export video", e
+					print "Can't clean up video", e, filelist, fname
 			#Delete eps not updated
 			try:
 				for f in filelist:

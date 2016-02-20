@@ -68,7 +68,7 @@ def episodes(filter = common.args.url):
 									'TVShowTitle' : season_json['data']['Show']['Name'],
 									'season' : season_num,
 									'episode' : episode_number}
-					episodes.append((u, episode_name, episode_thumb, infoLabels, None, False, None))
+					episodes.append((u, episode_name, episode_thumb, infoLabels, None, False, 'Full Episode'))
 	return episodes
 
 def play_video(episode_url = common.args.url):
