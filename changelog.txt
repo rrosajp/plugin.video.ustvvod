@@ -1,3 +1,10 @@
+version 1.4.0
+
+  * add MTV2
+  * improvement CC
+  * improvement library export
+  * fix AMC export
+
 version 1.3.9
 
   * fix History
