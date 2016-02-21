@@ -192,12 +192,12 @@ def seasons(show_url = common.args.url):
 
 def seasons_powernation():
 	shows = []
-	master_data = connection.getURL(PN_API + "shows")
+	master_data = connection.getURL(PN_API + "shows/all")
 	show_json = json.loads(master_data)
 	for show in show_json['shows']:
 		show_name = show['title']
 		show_id = show['episode_prefix']
-		shows.append((show_name, SITE, 'episodes', PN_API + "episodes/all/show/" + show_id, -1, -1))
+		shows.append((show_name, SITE, 'episodes', PN_API + "episodes/all/show/" + show_id + "/per_page/75", -1, -1))
 	
 	return shows
 
